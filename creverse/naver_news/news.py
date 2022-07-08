@@ -16,3 +16,8 @@ chrome_options = webdriver.ChromeOptions()
 driver = webdriver.Chrome('c:/Users/hwlee/Desktop/lhw/chromedriver.exe', options=chrome_options)
 driver.implicitly_wait(2)
 driver.get(URL)
+
+html = driver.page_source
+soup = BeautifulSoup(html, 'html.parser')
+
+list_news_ul = '#main_pack > section.sc_new.sp_nnews._prs_nws > div > div.group_news > ul'
