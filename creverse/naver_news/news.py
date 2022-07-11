@@ -1,4 +1,3 @@
-from lib2to3.pgen2 import driver
 import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
@@ -11,7 +10,7 @@ URL = 'https://search.naver.com/search.naver?where=news&query=%ED%81%AC%EB%A0%88
 
 # 웹드라이버 설정
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument('headless')
+chrome_options.add_argument('headless')
 
 driver = webdriver.Chrome('c:/Users/hwlee/Desktop/lhw/chromedriver.exe', options=chrome_options)
 driver.implicitly_wait(2)
@@ -19,5 +18,18 @@ driver.get(URL)
 
 html = driver.page_source
 soup = BeautifulSoup(html, 'html.parser')
+container = soup.find('ul', 'list_news')
+li_all = container.find_all('li')
 
-list_news_ul = '#main_pack > section.sc_new.sp_nnews._prs_nws > div > div.group_news > ul'
+creverse_news_data = []
+
+for li in li_all:
+  title = li.find('a', 'news_tit').text.strip()
+  description = li.find('a', 'api_txt_lines dsc_txt_wrap').text.strip()
+  each = {
+    "제목": title,
+    "내용": description
+  }
+  creverse_news_data.append(each)
+
+print(pd.DataFrame(creverse_news_data))
